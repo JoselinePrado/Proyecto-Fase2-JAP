@@ -17,12 +17,39 @@
 </head>
 
 <body>
-  <main class="mt-5">
-    <div class="container">
-      <div class="alert alert-danger text-center" role="alert">
-        <h4 class="alert-heading">Funcionalidad en desarrollo</h4>
-      </div>
+  <main class="mt-5">    
+  <!-- SECCION CONTENIDO -->
+  <div class="contenedor">
+    <img class="anchoTotal" src="img/login.png" />
+    <h4>Inicio de Sesión</h4>
+    <label for="email">Email</label>
+    <div>
+      <input class="anchoTotal" type="email" id="email" placeholder="Email">
     </div>
+    <label for="password1">Contraseña</label>
+    <div>
+      <input class="anchoTotal" type="password" id="password1" placeholder="Contraseña">
+    </div>
+    <button type="button" id="regBtn" onclick="CheckLOG()">Ingresar</button>
+    <button type="button" id="regresar">Regresar</button>
+    </div>
+
+    <!-- Para Google authentication  
+      FUENTE: https://developers.google.com/identity/gsi/web/guides/migration#popup-mode_1 -->
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <div id="g_id_onload"
+         data-client_id="535470899264-79o5ehb5mdks9nqgqb81bqn0ulejq4i8"
+         data-callback="handleCredentialResponse">
+    </div>
+    <div class="g_id_signin" data-type="standard"></div>
+
+    <script>
+      function handleCredentialResponse(usuarioGoogle) {
+        window.location.href = 'index.html';
+      }
+    </script>
+
   </main>
   <footer class="text-muted">
     <div class="container">
@@ -34,7 +61,14 @@
       <p>Clickea <a target="_blank" href="Letra.pdf">aquí</a> para descargar la letra del obligatorio.</p>
     </div>
   </footer>
+
+  <div class="alert alert-danger alert-dismissible fade" role="alert" id="alerta-error">
+    <p>Los datos ingresados no cumplen con los requisitos solicitados</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
   <script src="js/login.js"></script>
+
 </body>
 
 </html>
