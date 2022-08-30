@@ -29,3 +29,9 @@ function AccesoDenegado() {
 document.getElementById("regresar").addEventListener("click", function(){
     window.location.href = "index.html"
 })
+
+document.getElementById("regBtn").addEventListener("click", () => {
+    localStorage.setItem("inputUSUARIO", document.getElementById('email').value);
+})
+
+

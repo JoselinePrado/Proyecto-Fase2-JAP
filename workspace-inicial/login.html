@@ -39,16 +39,30 @@
 
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <div id="g_id_onload"
-         data-client_id="535470899264-79o5ehb5mdks9nqgqb81bqn0ulejq4i8"
+         data-client_id="535470899264-79o5ehb5mdks9nqgqb81bqn0ulejq4i8.apps.googleusercontent.com"
          data-callback="handleCredentialResponse">
+      
     </div>
     <div class="g_id_signin" data-type="standard"></div>
 
     <script>
-      function handleCredentialResponse(usuarioGoogle) {
-        window.location.href = 'index.html';
+      function decodeJwtResponse(token) {
+        var baseurl = token.split('.')[1];
+        var base64 = baseurl.replace(/-/g, '+').replace(/-/g, '/');
+        var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
       }
-    </script>
+
+      function handleCredentialResponse(usuarioGoogle) {
+       localStorage.setItem("inputUSUARIO", decodeJwtResponse(usuarioGoogle.credential).name);
+       window.location.href = "index.html";
+       window.open("index.html", "_self");
+
+      }
+
+    </script> 
 
   </main>
   <footer class="text-muted">

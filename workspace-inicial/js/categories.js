@@ -1,4 +1,4 @@
-const ORDER_ASC_BY_NAME = "AZ";
+const ORDER_ASC_BY_price = "AZ";
 const ORDER_DESC_BY_NAME = "ZA";
 const ORDER_BY_PROD_COUNT = "Cant.";
 let currentCategoriesArray = [];
@@ -8,7 +8,7 @@ let maxCount = undefined;
 
 function sortCategories(criteria, array){
     let result = [];
-    if (criteria === ORDER_ASC_BY_NAME)
+    if (criteria === ORDER_ASC_BY_price)
     {
         result = array.sort(function(a, b) {
             if ( a.name < b.name ){ return -1; }
@@ -35,9 +35,11 @@ function sortCategories(criteria, array){
     return result;
 }
 
-function setCatID(id) {
+function setCatID(id, name) {
     localStorage.setItem("catID", id);
-    window.location = "products.html"
+    localStorage.setItem("catName", name);
+    
+    window.location = "products.html";
 }
 
 function showCategoriesList(){
@@ -50,7 +52,7 @@ function showCategoriesList(){
             ((maxCount == undefined) || (maxCount != undefined && parseInt(category.productCount) <= maxCount))){
 
             htmlContentToAppend += `
-            <div onclick="setCatID(${category.id})" class="list-group-item list-group-item-action cursor-active">
+            <div onclick="setCatID(${category.id}, '${category.name}')" class="list-group-item list-group-item-action cursor-active">
                 <div class="row">
                     <div class="col-3">
                         <img src="${category.imgSrc}" alt="${category.description}" class="img-thumbnail">
@@ -97,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function(e){
     });
 
     document.getElementById("sortAsc").addEventListener("click", function(){
-        sortAndShowCategories(ORDER_ASC_BY_NAME);
+        sortAndShowCategories(ORDER_ASC_BY_price);
     });
 
     document.getElementById("sortDesc").addEventListener("click", function(){
@@ -141,3 +143,9 @@ document.addEventListener("DOMContentLoaded", function(e){
         showCategoriesList();
     });
 });
+
+
+
+
+
+
