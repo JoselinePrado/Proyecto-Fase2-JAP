@@ -6,13 +6,12 @@ function mostrarListaDeProductos() {
 
     for (let i = 0; i < productsArray.length; i++) {
         let datos = productsArray[i];
-        
 
         if (((inputSearch == undefined) || (inputSearch != undefined && datos.name.includes(inputSearch))) ||
             ((inputSearch == undefined) || (inputSearch != undefined && datos.description.includes(inputSearch)))){
 
         contenidoProductos += `
-        <div  class="list-group-item list-group-item-action">
+        <div  onclick="setCatID(${datos.id}, '${datos.name}')" class="list-group-item list-group-item-action cursor-active">
             <div class="row">
                 <div class="col-3">
                     <img src="${datos.image}" alt="${datos.description}" class="img-thumbnail">
@@ -27,6 +26,8 @@ function mostrarListaDeProductos() {
             </div>
         </div>
         `
+
+
     }
         document.getElementById("product").innerHTML = contenidoProductos;
     };
@@ -45,7 +46,7 @@ function mostrarFiltroCountDeProductos() {
         ((maxCost == undefined) || (maxCost != undefined && parseInt(datos.cost) <= maxCost))){
 
         contenidoProductos += `
-        <div  class="list-group-item list-group-item-action">
+        <div onclick="setCatID(${datos.id}, '${datos.name}')" class="list-group-item list-group-item-action cursor-active">
             <div class="row">
                 <div class="col-3">
                     <img src="${datos.image}" alt="${datos.description}" class="img-thumbnail">
@@ -121,7 +122,9 @@ function setCatID(id, name) {
     localStorage.setItem("catID", id);
     localStorage.setItem("catName", name);
     
-    window.location = "products.html";
+   // window.location = "products.html";
+    window.location = "product-info.html";
+
 }
 
 function sortAndShowCategories(sortCriteria, categoriesArray){

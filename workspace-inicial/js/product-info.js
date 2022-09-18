@@ -1,0 +1,160 @@
+let productsArray = [];
+let comentariosArray = [];
+
+function mostrarProductos() {
+    let contenidoProductos = "";
+
+    let datos = productsArray;
+    let arrayImages = datos.images;
+    let htmlImagenes = "";
+    let jsonComentarios = comentariosArray;
+    let htmlComentarios = "";
+
+    if (arrayImages) {
+        for (let i = 0; i < arrayImages.length; i++) {
+            htmlImagenes += `<img src="${arrayImages[i]}" class="img-thumbnail" width="300" height="236">`;
+        } //for para recorrer las imagenes, ya que images es una lista en el JSON. lo guardo en variable para luego mostrar en html
+    }
+ 
+    if (jsonComentarios) {
+        for (let i = 0; i < jsonComentarios.length; i++) {   
+            let cantidad = jsonComentarios[i].score;
+            let starsHTML = stars(cantidad); //realizo llamada de la funcion con el parametro de score
+                          
+            htmlComentarios += `
+            <div class="list-group-item list-group-item-action">
+            <div  class="row">
+                <div class="col">
+                    <h6 class="mb-1"><small class="fw-bolder h6">${jsonComentarios[i].user}${" "}</small>-${" "}${jsonComentarios[i].dateTime}${" "}-${" "}${starsHTML}</h6>
+                    <p class="mb-1">${jsonComentarios[i].description}</p>
+                </div>
+            </div>
+            </div>
+            <hr/>
+                `
+
+           ;
+        } //for para recorrer los comentarios
+    
+    }
+
+    contenidoProductos += `
+    <div  class="container-sm cursor-active">
+                <h1 class="m-4 mb-1">${datos.name}</h1>
+            </div>
+    </div>
+        <hr/>
+        <div class="list-group-item list-group-item-action">
+            <div  class="row">
+                <div class="col-3 text-center bg-light">       
+                <div class=" bg-dark text-white">
+                    <h5>Imagenes Ilustrativas</h5>
+                </div>          
+                    ${htmlImagenes}
+                </div>
+                <div class="col">
+                    <h5 class="col-3 bg-light">Precio</h5>
+                        <p class="mb-1">${datos.cost}${" "}${datos.currency}</p>
+                    <h5 class="col-3 bg-light">Descripcion</h5>
+                        <p class="mb-1">${datos.description}</p>
+                    <h5 class="col-3 bg-light">Categoria</h5>
+                        <p class="mb-1">${datos.category}</p>
+                    <h5 class="col-3 bg-light">Vendidos</h5>
+                        <p class="mb-1">${datos.soldCount}</p>
+                    <div class="col">
+                        <h5 class="col-3 bg-light">Comentarios</h5>
+                            <p class="mb-1">${htmlComentarios}</p>
+                        <div class="col" id="showNewComent">
+                        </div>             
+                            <textarea name="coment" id="newComent" cols="6" type"text" class="form-control" rows="3" placeholder="Ingrese Comentario"></textarea>
+                            <select name="id-star" id="starsNewComment">
+                            <option value="0" selected>Cantidad de estrellas:</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            </select>
+                            <button type="button" id="enviar" class="btn btn-primary" onclick="clickBtn()">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `
+
+
+
+        document.getElementById("product").innerHTML = contenidoProductos;
+
+}
+
+
+function setCatID(id, name) {
+    localStorage.setItem("catID", id);
+    localStorage.setItem("catName", name);
+    
+    window.location = "product-info.html";
+
+}
+
+
+
+//Función que se ejecuta una vez que se haya lanzado el evento de
+//que el documento se encuentra cargado, es decir, se encuentran todos los
+//elementos HTML presentes.
+
+document.addEventListener("DOMContentLoaded", function (e) {
+    getJSONData(PRODUCT_INFO_URL + localStorage.catID + ".json").then(function (resultObj) {
+        if (resultObj.status === "ok") {
+            productsArray = resultObj.data;
+        }
+        getJSONData(PRODUCT_INFO_COMMENTS_URL + localStorage.catID + ".json").then(function(resultObj){
+            if (resultObj.status === "ok") {
+                comentariosArray = resultObj.data;
+                mostrarProductos();
+                iniciar();
+            }
+        });
+    });
+});
+
+
+
+function stars(cantidad) { //funcion para convertir puntuacion en estrellas
+    let star = "";
+    for (let i = 0; i < cantidad; i++) {
+        star += `<span class="fa fa-star checked"></span>` //estrellas chequeadas, pintadas
+    }
+    for (let i = cantidad; i < 5; i++) {
+        star += `<span class="fa fa-star"></span>` //estrellas vacias
+    }
+    return star; //retorna string
+} 
+
+function iniciar() {
+       // localStorage.setItem("listarComentarioNew", ""); RESETEA
+    if (localStorage.getItem("listarComentarioNew" + localStorage.catID )) {
+        mostrar(); //llama a funcion mostrar para que traiga el contenido almacenado en localSTORAGE al actualizar el nav
+    }
+}
+
+function clickBtn() { 
+    var showNewComent = document.getElementById("showNewComent");
+    var starsComment = document.getElementById("starsNewComment").value; //toma valor del input de las estrellas
+    var htmlEstrellas = stars(starsComment); // llama a la funcion de estrellas y le envia el valor
+    var hoy = new Date();
+    var ahora = hoy.toLocaleString();
+    showNewComent.innerHTML += `<div class="list-group-item list-group-item-action">` + `<div  class="row">` + `<div class="col">` + `<h6 class="mb-1">` + `<small class="fw-bolder h6">` + localStorage.getItem("inputUSUARIO") + `</small>` + ` - ` + ahora +
+    ` - ` + htmlEstrellas + `</h6>` + document.getElementById("newComent").value + `</div>` + `</div>` + `</div>` + `<hr/>`; //imprime en el contenedor lo ingresado en el value
+    localStorage.setItem("listarComentarioNew" + localStorage.catID, showNewComent.innerHTML); //setea lo que esta en el contenedor y lo guarda en el div
+    document.getElementById("newComent").value = ""; //reinicia el textArea
+}
+
+
+
+ // funcion para mostrar contenido al iniciar nav.
+function mostrar () {
+    var mostrarComentario = localStorage.getItem("listarComentarioNew" + localStorage.catID); //obtiene lo guardado en el div y lo almacena en la variable mostrarComentario
+    document.getElementById("showNewComent").innerHTML = mostrarComentario;  //imprime el comentario y la muestra al ser llamada la funcion mostrar
+   
+}

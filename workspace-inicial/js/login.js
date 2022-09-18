@@ -5,7 +5,7 @@ function CheckLOG() {
     var email = document.getElementById("email").value;
     var password = document.getElementById("password1").value;
     // validar datos
-    if (email=="") {
+    if (email=="" || !email.includes('@')) {
         error   = true;
     } // endif
     if (password=="") {
@@ -31,7 +31,11 @@ document.getElementById("regresar").addEventListener("click", function(){
 })
 
 document.getElementById("regBtn").addEventListener("click", () => {
-    localStorage.setItem("inputUSUARIO", document.getElementById('email').value);
+    var email = document.getElementById('email').value;
+    email = email.substring(0, email.indexOf('@'));
+    localStorage.setItem("inputUSUARIO", email);
 })
+
+
 
 
