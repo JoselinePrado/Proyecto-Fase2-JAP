@@ -6,13 +6,43 @@ function mostrarProductos() {
 
     let datos = productsArray;
     let arrayImages = datos.images;
+    let arrayRelacionados = datos.relatedProducts;
+    let htmlRelacionados = "";
     let htmlImagenes = "";
     let jsonComentarios = comentariosArray;
     let htmlComentarios = "";
 
     if (arrayImages) {
+        htmlImagenes += `<div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">`
         for (let i = 0; i < arrayImages.length; i++) {
-            htmlImagenes += `<img src="${arrayImages[i]}" class="img-thumbnail" width="300" height="236">`;
+            htmlImagenes += `<div class="carousel-item ` + (i === 0 ? `active` : ``) +  `" data-bs-interval="5000">
+            <img src="${arrayImages[i]}" class="d-block w-100">
+          </div>`;
+            //htmlImagenes += `<img src="${arrayImages[i]}" class="img-thumbnail" width="300" height="236">`;
+
+        } //for para recorrer las imagenes, ya que images es una lista en el JSON. lo guardo en variable para luego mostrar en html
+        htmlImagenes += `</div><button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleSlidesOnly" data-bs-slide="prev">
+        <span class="text-dark">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleSlidesOnly" data-bs-slide="next">
+        <span class="text-dark">Next</span>
+      </button></div>`
+    }
+
+    if (arrayRelacionados) {
+        for (let i = 0; i < arrayRelacionados.length; i++) {
+            htmlRelacionados += `
+            <div  onclick="setCatID(${arrayRelacionados[i].id}, '${arrayRelacionados[i].name}')" class="col-md-5 border m-2">
+            <img src="${arrayRelacionados[i].image}" class="img-responsive" width="90%" height="70%">                
+            <div class="p-3 justify-content-between">
+                <h4 class="mb-1">${arrayRelacionados[i].name}</h4>
+            </div>
+            <div class="p-3">
+            <p class="mb-1 float-end"> <a href="product-info.html">Ver Mas...</a></p>
+            </div>
+        </div>` ;
+           
         } //for para recorrer las imagenes, ya que images es una lista en el JSON. lo guardo en variable para luego mostrar en html
     }
  
@@ -39,52 +69,59 @@ function mostrarProductos() {
     }
 
     contenidoProductos += `
-    <div  class="container-sm cursor-active">
+    <div class="container-sm cursor-active">
                 <h1 class="m-4 mb-1">${datos.name}</h1>
-            </div>
     </div>
-        <hr/>
-        <div class="list-group-item list-group-item-action">
+        
+     <hr/>
+
+    <div class="list-group-item list-group-item-action">
             <div  class="row">
-                <div class="col-3 text-center bg-light">       
-                <div class=" bg-dark text-white">
-                    <h5>Imagenes Ilustrativas</h5>
-                </div>          
+                <div class="col-6 text-center bg-light">       
+                    <div class=" bg-dark text-white">
+                        <h5>Imagenes Ilustrativas</h5>
+                    </div>          
                     ${htmlImagenes}
-                </div>
+                    </div>
                 <div class="col">
                     <h5 class="col-3 bg-light">Precio</h5>
-                        <p class="mb-1">${datos.cost}${" "}${datos.currency}</p>
+                        <p class="mb-2">${datos.cost}${" "}${datos.currency}</p>
                     <h5 class="col-3 bg-light">Descripcion</h5>
-                        <p class="mb-1">${datos.description}</p>
+                        <p class="mb-2">${datos.description}</p>
                     <h5 class="col-3 bg-light">Categoria</h5>
-                        <p class="mb-1">${datos.category}</p>
+                        <p class="mb-2">${datos.category}</p>
                     <h5 class="col-3 bg-light">Vendidos</h5>
-                        <p class="mb-1">${datos.soldCount}</p>
-                    <div class="col">
-                        <h5 class="col-3 bg-light">Comentarios</h5>
-                            <p class="mb-1">${htmlComentarios}</p>
-                        <div class="col" id="showNewComent">
-                        </div>             
-                            <textarea name="coment" id="newComent" cols="6" type"text" class="form-control" rows="3" placeholder="Ingrese Comentario"></textarea>
-                            <select name="id-star" id="starsNewComment">
-                            <option value="0" selected>Cantidad de estrellas:</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            </select>
-                            <button type="button" id="enviar" class="btn btn-primary" onclick="clickBtn()">Enviar</button>
-                    </div>
+                        <p class="mb-2">${datos.soldCount}</p>
                 </div>
             </div>
-        </div>
+    </div>
+    <br/>
+    <div class="col">
+        <h5 class="col-3 bg-light">Comentarios</h5>
+        <div class="col" id="showNewComent">         
+            <textarea name="coment" id="newComent" cols="6" type"text" class="form-control" rows="3" placeholder="Ingrese Comentario"></textarea>
+            <select name="id-star" id="starsNewComment">
+                <option value="0" selected>Cantidad de estrellas:</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <button type="button" id="enviar" class="btn btn-primary" onclick="clickBtn()">Enviar</button>
+        </div> 
+        <p class="mb-1">${htmlComentarios}</p>
+    </div>
+        <hr/>
+    <div class="container justify-content-center"> <h3 class=" bg-dark text-white text-center">Productos relacionados</h3>
+                <div class="row justify-content-center"><p class="mb-1">${htmlRelacionados}</p></div>
+    </div>
     `
 
 
 
         document.getElementById("product").innerHTML = contenidoProductos;
+        
 
 }
 

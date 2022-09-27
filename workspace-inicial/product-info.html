@@ -33,9 +33,18 @@
           <li class="nav-item">
             <a class="nav-link" href="login.html">Ingresar</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" id="usuario">Usuario</a>
-          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Usuario
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+              <li><a class="dropdown-item action" href="cart.html">Mi Carrito</a></li>
+              <li><a class="dropdown-item action" href="my-profile.html">Mi Perfil</a></li>
+              <div class="dropdown-divider"></div>
+                <li><a class="dropdown-item action" id="resetUser" href="login.html">Cerrar Sesion</a></li>
+              </div>
+            </ul>
+          </li>  
         </ul>
       </div>
     </div>
@@ -68,7 +77,8 @@
   <script src="js/product-info.js"></script>
   <script>
     function logueo() {
-      document.getElementById('usuario').innerHTML = localStorage.getItem("inputUSUARIO");
+      document.getElementById('navbarDarkDropdownMenuLink').innerHTML = localStorage.getItem("inputUSUARIO");
+      document.getElementById("resetUser").value = "";
     }
 
   </script>
