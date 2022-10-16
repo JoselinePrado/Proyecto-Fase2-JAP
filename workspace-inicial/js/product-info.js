@@ -3,7 +3,6 @@ let comentariosArray = [];
 
 function mostrarProductos() {
     let contenidoProductos = "";
-
     let datos = productsArray;
     let arrayImages = datos.images;
     let arrayRelacionados = datos.relatedProducts;
@@ -14,20 +13,20 @@ function mostrarProductos() {
 
     if (arrayImages) {
         htmlImagenes += `<div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">`
-        for (let i = 0; i < arrayImages.length; i++) {
-            htmlImagenes += `<div class="carousel-item ` + (i === 0 ? `active` : ``) +  `" data-bs-interval="5000">
-            <img src="${arrayImages[i]}" class="d-block w-100">
-          </div>`;
-            //htmlImagenes += `<img src="${arrayImages[i]}" class="img-thumbnail" width="300" height="236">`;
-
-        } //for para recorrer las imagenes, ya que images es una lista en el JSON. lo guardo en variable para luego mostrar en html
-        htmlImagenes += `</div><button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleSlidesOnly" data-bs-slide="prev">
-        <span class="text-dark">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleSlidesOnly" data-bs-slide="next">
-        <span class="text-dark">Next</span>
-      </button></div>`
+                            <div class="carousel-inner">`
+                                for (let i = 0; i < arrayImages.length; i++) {
+                                    htmlImagenes += `<div class="carousel-item ` + (i === 0 ? `active` : ``) +  `" data-bs-interval="5000">
+                                                        <img src="${arrayImages[i]}" class="d-block w-100">
+                                                    </div>`;
+                                    } //for para recorrer las imagenes, ya que images es una lista en el JSON. lo guardo en variable para luego mostrar en html
+            htmlImagenes += `</div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleSlidesOnly" data-bs-slide="prev">
+                                <span class="text-dark">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleSlidesOnly" data-bs-slide="next">
+                                <span class="text-dark">Next</span>
+                            </button>
+                        </div>`
     }
 
     if (arrayRelacionados) {
@@ -71,6 +70,9 @@ function mostrarProductos() {
     contenidoProductos += `
     <div class="container-sm cursor-active">
                 <h1 class="m-4 mb-1">${datos.name}</h1>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button class="btn btn-danger me-md-2" type="button" id="comprar" onclick="clickComprar(${datos.id}, '${datos.name}', ${datos.cost}, '${datos.currency}', '${datos.images[0]}' )">Comprar</button>
+                </div>
     </div>
         
      <hr/>
@@ -108,7 +110,7 @@ function mostrarProductos() {
                 <option value="4">4</option>
                 <option value="5">5</option>
             </select>
-            <button type="button" id="enviar" class="btn btn-primary" onclick="clickBtn()">Enviar</button>
+            <button type="button" id="enviar" class="btn btn-primary me-md-2" onclick="clickBtn()">Enviar</button>
         </div> 
         <p class="mb-1">${htmlComentarios}</p>
     </div>
@@ -131,6 +133,28 @@ function setCatID(id, name) {
     localStorage.setItem("catName", name);
     
     window.location = "product-info.html";
+
+}
+
+function clickComprar(id, name, cost, currency, img) {
+    var lista = [];
+    console.log(localStorage.getItem("botonComprar"));
+    if (localStorage.getItem("botonComprar") !== null) {
+        lista = JSON.parse(localStorage.getItem("botonComprar"));
+    }
+    const objectoCarrito = {
+        "id": id,
+        "name": name,
+        "count": 1,
+        "unitCost": cost,
+        "currency": currency,
+        "image": img
+    }
+    console.log(lista);
+    lista.push(objectoCarrito);
+    localStorage.setItem("botonComprar", JSON.stringify(lista));
+    
+    window.location = "cart.html";
 
 }
 
