@@ -51,46 +51,49 @@
 
   <main class="pb-5">
 
-    <div id="comp-list-container"></div>
-  <hr>
-    <div class="p-2 m-3">
-        <h4 class="p-2">Tipos de Envio</h4>
+    <div id="comp-list-container" class="bg-lightp-3 mb-2 bg-light text-dark"></div>
+      <hr>
+      <div class="p-2 m-3 bg-light text-dark">
+          <h4 class="p-2">Tipos de Envio</h4>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="tipoenvio" id="idPremium" onchange="selectPremium()" checked>
+            <label class="form-check-label" for="idPremium">
+              Premium 2 a 5 dias (15%)
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="tipoenvio" id="idExpress" onchange="selectExpress()" >
+            <label class="form-check-label" for="idExpress">
+              Express 5 a 8 dias (7%)
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="tipoenvio" id="idStandard" onchange="selectStandard()" >
+            <label class="form-check-label" for="idStandard">
+              Standard 12 a 15 dias (5%)
+            </label>
+          </div>
+      </div>
 
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
-          <label class="form-check-label" for="flexRadioDefault1">
-            Premium 2 a 5 dias (15%)
-          </label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-          <label class="form-check-label" for="flexRadioDefault2">
-            Express 5 a 8 dias (7%)
-          </label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-          <label class="form-check-label" for="flexRadioDefault1">
-            Standard 12 a 15 dias (5%)
-          </label>
-        </div>
-    </div>
-
-
-    <div class="p-2 m-3">
+      <div class="p-2 m-3 bg-light text-dark">
         <h4 class="p-2">Direccion de Envio</h4>
-
         <div class="row g-2">
           <div class="col-md">
             <div class="form-floating">
-              <input type="email" class="form-control" id="floatingInputGridCALLE" value="">
-              <label for="floatingInputGrid">Calle</label>
+              <input type="text" class="form-control" id="idCALLE" value="" required onchange="removerInvalido(id)">
+              <label for="idCALLE" class="form-label">Calle</label>
+              <div class="invalid-feedback">
+                Proporciona una calle válida.
+              </div>
             </div>
           </div>
           <div class="col-md">
             <div class="form-floating">
-              <input type="email" class="form-control" id="floatingInputGridNUMERO" value="">
-              <label for="floatingInputGrid">Numero</label>
+              <input type="number" class="form-control" id="idNumCALLE" value="" required onchange="removerInvalido(id)">
+              <label for="idNumCALLE" class="form-label">Numero</label>
+              <div class="invalid-feedback">
+                Proporciona un numero.
+              </div>
             </div>
           </div>
         </div>
@@ -98,13 +101,142 @@
         <div class="row g-2">
           <div class="col-6">
             <div class="form-floating">
-              <input type="email" class="form-control" id="floatingInputGridESQUINA" value="">
-              <label for="floatingInputGrid">Esquina</label>
+              <input type="text" class="form-control" id="idESQUINA" value="" required onchange="removerInvalido(id)">
+              <label for="idNumESQUINA" class="form-label">Esquina</label>
+              <div class="invalid-feedback">
+                Proporciona una esquina válida.
+              </div>
             </div>
           </div>
         </div>
-
     </div>
+
+    <div class="list-group-item list-group-item p-3 mb-2 bg-light text-dark">
+      <h4 class="p-2">Costos</h4>
+      <div class="row w-50 p-3">
+        <div class="col">
+          <div class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                  <h6 class="mb-1">Subtotal</h6>
+                  <small class="mb-1" id="sumaSubtotal"></small>
+              </div>
+                <p class="text-muted">Costo unitario del producto por cantidad</p>
+           </div>
+           <div class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                  <h6 class="mb-1">Costo de Envio</h6>
+                  <small class="mb-1" id="costEnvio">$USD ENVIO</small>
+              </div>
+                <p class="text-muted">Segun tipo de envio seleccionado</p>
+            </div>
+            <div class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1">TOTAL</h6>
+                <small class="mb-1" id="total">$USD FINAL</small>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- SECCION MODAL -->
+    <div class="list-group-item list-group-item p-3 mb-2 bg-light text-dark">
+      <h4 class="p-2">Forma de Pago</h4>
+      <div class="input-group w-50 p-3">
+        <input type="text" class="form-control" placeholder="Seleccione forma de pago" aria-label="" aria-describedby="button-addon2">
+        <!-- Button trigger modal -->
+        <button class="btn btn-outline-secondary" type="button" id="button-addon2" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="abrirModal()">Seleccionar</button>
+        <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Forma de Pago</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body bg-light text-dark">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="tipopago" id="idTC" onchange="controlTC()" checked>
+                      <label class="form-check-label" for="idTC">
+                        Tarjeta de Credito
+                      </label>
+                    </div>
+                    <hr>
+                    <div class="row g-2">
+                        <div class="col-md">
+                          <div class="form-floating">
+                            <input type="number" class="form-control is-invalid" aria-describedby="validationServer03Feedback" id="numTC" value="" onchange="removerInvalido(id)">
+                            <label for="numTC" class="form-label">Numero de TC</label>
+                            <div id="validationServer03Feedback" class="invalid-feedback">
+                              Proporciona un numero válido.
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md">
+                          <div class="form-floating">
+                            <input type="number" class="form-control is-invalid" aria-describedby="validationServer03Feedback" id="codigoSeguridad" value="" onchange="removerInvalido(id)">
+                            <label for="codigoSeguridad" class="form-label">CVC</label>
+                            <div id="validationServer03Feedback" class="invalid-feedback">
+                              Proporciona un codigo válido.
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <br>
+                      <div class="row g-2">
+                        <div class="col-6">
+                          <div class="form-floating">
+                            <input type="number" class="form-control is-invalid" aria-describedby="validationServer03Feedback" id="vencimiento" value="" onchange="removerInvalido(id)">
+                            <label for="vencimiento" class="form-label">Vencimiento (MM/AA)</label>
+                            <div id="validationServer03Feedback" class="invalid-feedback">
+                              Proporciona un vencimiento válido.
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="tipopago" id="idCBANC" onchange="controlCBANCARIA()">
+                      <label class="form-check-label" for="idCBANC">
+                        Transferencia Bancaria
+                      </label>
+                    </div>
+                    <hr>
+                    <div class="form-floating">
+                      <input type="number" class="form-control is-invalid" aria-describedby="validationServer03Feedback" id="numCUENTA" value="" onchange="removerInvalido(id)">
+                      <label for="numCUENTA" class="form-label">Numero de Cuenta</label>
+                      <div id="validationServer03Feedback" class="invalid-feedback" id="numCUENTAERROR">
+                        Proporciona un Numero válido.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+      </div>
+    </div>
+
+     <!-- SECCION FINALIZAR COMPRA -->
+
+    <div class="form-floating text-center d-grid gap-2 p-2 col-6 mx-auto">
+      <button type="button" class="btn btn-info" id="finCompra" onclick="validarCompra()">Finalizar Compra</button>
+    </div>
+
+    <div class="alert alert-danger alert-dismissible fade" role="alert" id="alerta-error" onclick="cerrarError()">
+      <div id="texto-alerta"></div>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="alert alert-success fade" role="alert" id="alerta-success" onclick="cerrarSucces()">
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      <p>Compra realizada con exito</p>
+    </div>
+
+
   </main>
   <footer class="text-muted">
     <div class="container">

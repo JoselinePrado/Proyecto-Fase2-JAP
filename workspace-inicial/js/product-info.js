@@ -136,18 +136,27 @@ function setCatID(id, name) {
 
 }
 
+// FUNCION QUE CREA LA LISTA BOTONCOMPRAR PARA ENVIARLA AL CARRITO CON FORMATO IGUAL AL JSON DEL PRODUCTO PRE CARGADO
+
 function clickComprar(id, name, cost, currency, img) {
     var lista = [];
     console.log(localStorage.getItem("botonComprar"));
     if (localStorage.getItem("botonComprar") !== null) {
         lista = JSON.parse(localStorage.getItem("botonComprar"));
     }
+    let costTotal = cost;
+    let currencyFinal = currency;
+    console.log(currency);
+    if (currency === "UYU") {
+        costTotal = Math.round(cost / 42);
+        currencyFinal = "USD" ;
+    }
     const objectoCarrito = {
         "id": id,
         "name": name,
         "count": 1,
-        "unitCost": cost,
-        "currency": currency,
+        "unitCost": costTotal,
+        "currency": currencyFinal,
         "image": img
     }
     console.log(lista);
