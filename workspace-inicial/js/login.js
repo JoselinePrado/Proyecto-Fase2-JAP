@@ -34,6 +34,10 @@ document.getElementById("regBtn").addEventListener("click", () => {
     var email = document.getElementById('email').value;
     email = email.substring(0, email.indexOf('@'));
     localStorage.setItem("inputUSUARIO", email);
+
+    var correo = document.getElementById('email').value;
+    localStorage.setItem("inputCORREO", correo);
+
 })
 
 
